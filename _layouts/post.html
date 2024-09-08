@@ -3,6 +3,18 @@ layout: base
 ---
 <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
 
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/latest/MathJax.js">
+MathJax.Hub.Config({
+ extensions: ["tex2jax.js","TeX/AMSmath.js","TeX/AMSsymbols.js"],
+ jax: ["input/TeX", "output/HTML-CSS"],
+ tex2jax: {
+     inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+     displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+ },
+ "HTML-CSS": { availableFonts: ["TeX"] }
+});
+</script>
+
   <header class="post-header">
     <h1 class="post-title p-name" itemprop="name headline">{{ page.title | escape }}</h1>
     <p class="post-meta">
@@ -25,18 +37,6 @@ layout: base
         {% endfor %}
       {%- endif -%}</p>
   </header>
-
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/latest/MathJax.js">
-MathJax.Hub.Config({
- extensions: ["tex2jax.js","TeX/AMSmath.js","TeX/AMSsymbols.js"],
- jax: ["input/TeX", "output/HTML-CSS"],
- tex2jax: {
-     inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-     displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
- },
- "HTML-CSS": { availableFonts: ["TeX"] }
-});
-</script>
 
   <div class="post-content e-content" itemprop="articleBody">
     {{ content }}
