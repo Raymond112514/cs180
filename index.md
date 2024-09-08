@@ -8,6 +8,4 @@
 layout: home
 ---
 
-Hello, this is my name: Raymond
-
-blah blah blah
+This is my portfolio to my CS180: Computer vision course at Berkeley.
