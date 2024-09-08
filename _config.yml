@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 title: Your awesome title
 author:
   name: GitHub User
@@ -72,3 +73,6 @@ minima:
   #  - { platform: youtube,        user_url: "https://www.youtube.com/jekyll" }
 
 
+=======
+theme: minima
+>>>>>>> b98fef8e3a7f85fb021f236042cb1ffb26f363f2

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <div align="center">
   <p><em><strong>Disclaimer:</strong> The information here may vary depending on the version you're using.<br/>
   Please refer to the <code>README.md</code> bundled within the theme-gem for information specific to your version or by pointing
@@ -378,3 +379,6 @@ To test your theme, run `script/server` (or `bundle exec jekyll serve`) and open
 ## License
 
 The theme is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
+=======
+# cs180
+>>>>>>> b98fef8e3a7f85fb021f236042cb1ffb26f363f2
