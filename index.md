@@ -7,3 +7,7 @@
 #
 layout: home
 ---
+
+Hello, this is my name: Raymond
+
+blah blah blah
