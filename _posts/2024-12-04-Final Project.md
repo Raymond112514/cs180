@@ -75,6 +75,11 @@ Once we are done with the sampling, we also need to sample equally spaced points
 
 The NeRF model is again parameterized by a MLP. The model takes in the 3D cooridnate $x$ and ray direction $d$ and outputs the density and RGB values. We follow the architecture as shown in Figure. 
 
+<div style="display: flex; justify-content: center;">   
+   <img src="{{ site.baseurl }}/assets/final_project/mlp_nerf.png" alt="Image 1" style="width: 90%; height: auto;"> 
+</div> 
+<p style="text-align: center; margin-top: 15px;"><strong>Figure 1:</strong> Noised images of different scale.</p>
+
 We applied separate positional encoding on the $x$ and $d$, with $L_x, L_d$ set to $10$ and $4$ respectively. The color rendered is given by the discreate approximation of the volume rendering equation
 
 $$\hat{C}(\mathbf{r}= \sum_{i=1}^N T_i(1-\exp(-\sigma_i\delta_i))\mathbf{c}_i\hspace{5mm}\text{where}\;T_i=\exp\bigg(-\sum_{j=1}^{i-1}\sigma_j\delta_j\bigg)
