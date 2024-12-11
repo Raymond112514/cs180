@@ -66,6 +66,11 @@ We then implemented a `RayDataset` class, the sampling method involves the follo
 
 Once we are done with the sampling, we also need to sample equally spaced points with perturbation on that sampled ray. This is done by sampling points on $\mathbf{r}_o+t\mathbf{r}_d$, where $t$ are the values sampled from $[2.0, 6.0]$ in our implementation. We also added slight noise on $t$ during training to prevent overfitting. The sampled ray are shown below.
 
+<div style="display: flex; justify-content: center;">   
+   <img src="{{ site.baseurl }}/assets/final_project/nerf_3d_data.png" alt="Image 1" style="width: 90%; height: auto;"> 
+</div> 
+<p style="text-align: center; margin-top: 15px;"><strong>Figure 1:</strong> Noised images of different scale.</p>
+
 ### NeRF Implemnetation
 
 The NeRF model is again parameterized by a MLP. The model takes in the 3D cooridnate $x$ and ray direction $d$ and outputs the density and RGB values. We follow the architecture as shown in Figure. 
@@ -76,7 +81,17 @@ $$\hat{C}(\mathbf{r}= \sum_{i=1}^N T_i(1-\exp(-\sigma_i\delta_i))\mathbf{c}_i\hs
 
 Once the rendered color is computed, the loss is the signal to noise ratio loss as before. We trained the model for $1000$ epochs with Adam optimizer with learning rate of $5\cdot 10^{-4}$. We sample $100$ images, and for each image $100$ rays are sampled. The rendered results during training is shown below. 
 
+<div style="display: flex; justify-content: center;">   
+   <img src="{{ site.baseurl }}/assets/final_project/nerf_3d_res.png" alt="Image 1" style="width: 90%; height: auto;"> 
+</div> 
+<p style="text-align: center; margin-top: 15px;"><strong>Figure 1:</strong> Noised images of different scale.</p>
+
 The signal to noise ratio of the training and validation set is plotted below.
+
+<div style="display: flex; justify-content: center;">   
+   <img src="{{ site.baseurl }}/assets/final_project/nerf_3d_plot.png" alt="Image 1" style="width: 90%; height: auto;"> 
+</div> 
+<p style="text-align: center; margin-top: 15px;"><strong>Figure 1:</strong> Noised images of different scale.</p>
 
 Once we trained the model, we can generate novel view image of the lego from arbitrary camera extrinsic. Below is a sperical rendering of the lego video using the provided cameras extrinsics. 
 
