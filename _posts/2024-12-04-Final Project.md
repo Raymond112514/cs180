@@ -2,7 +2,7 @@
 layout: post
 ---
 
-# Part A: Nueral Fields
+## Part A: Nueral Fields
 
 As a starting execise, we can fit a nueral radiance field on 2D images. The NeRF $F_{\theta}:{u, v}\rightarrow {r, g, b}$ is parameterized by a multiple layer network with sinosuidal positional encoding and maps a pixel $(u, v)$ to an rgb value $(r, g, b)$ The detailed architecture is shown in Figure 1.
 
@@ -47,11 +47,42 @@ There doesn't seem to be any perceptually obvious difference between the tuned v
 </div> 
 <p style="text-align: center; margin-top: 15px;"><strong>Figure 1:</strong> Noised images of different scale.</p>
 
+## Part B: Nueral Radiance Fields
+
+### Dataset preparation
+
+We now implement the neural radiance field from multiview images. We used the Lego scene from the original NeRF paper with lower resolution $(200\times 200$. For the dataset, we implemented the following helper functions
+
+* `transform(c2w, x_c)`: Transforms the a point from camera coordinate to the world coordinate.
+* `pixel_to_camera(K, uv, s)`: Transform a point from pixel cooridnate to the camera coordinate.
+* `pixel_to_ray(K, c2w, uv)`: Takes in a pixel coordinate and return the ray origin and ray direction. Done by
+
+We then implemented a `RayDataset` class, the sampling method involves the following step
+1. From the training image, sample `n_image` samples
+2. For each sampled image, sample `n_points` pixel coordinates
+3. Retrieve the RGB color at those points
+4. Compute ray origin and ray direction using the `pixel_to_ray` function, need to retreive the corresponding camera instrisic.
+5. Return ray origin, ray direction and RGB color, each of shape (N, 3), where $N$ is the total number of points sampled.
+
+Once we are done with the sampling, we also need to sample equally spaced points with perturbation on that sampled ray. This is done by sampling points on $\mathbf{r}_o+t\mathbf{r}_d$, where $t$ are the values sampled from $[2.0, 6.0]$ in our implementation. We also added slight noise on $t$ during training to prevent overfitting. The sampled ray are shown below.
+
+### NeRF Implemnetation
+
+The NeRF model is again parameterized by a MLP. The model takes in the 3D cooridnate $x$ and ray direction $d$ and outputs the density and RGB values. We follow the architecture as shown in Figure. 
+
+We applied separate positional encoding on the $x$ and $d$, with $L_x, L_d$ set to $10$ and $4$ respectively. The color rendered is given by the discreate approximation of the volume rendering equation
+
+$$\hat{C}(\mathbf{r}= \sum_{i=1}^N T_i(1-\exp(-\sigma_i\delta_i))\mathbf{c}_i\hspace{5mm}\text{where}\;T_i=\exp\bigg(-\sum_{j=1}^{i-1}\sigma_j\delta_j\bigg)
+
+Once the rendered color is computed, the loss is the signal to noise ratio loss as before. We trained the model for $1000$ epochs with Adam optimizer with learning rate of $5\cdot 10^{-4}$. We sample $100$ images, and for each image $100$ rays are sampled. The rendered results during training is shown below. 
+
+The signal to noise ratio of the training and validation set is plotted below.
+
+Once we trained the model, we can generate novel view image of the lego from arbitrary camera extrinsic. Below is a sperical rendering of the lego video using the provided cameras extrinsics. 
+
+## Bells and Whistle
 
 
-# Part B: Nueral Radiance Fields
-
-We now implement the neural radiance field from multiview images. We used the Lego scene from the original NeRF paper with lower resolution $(200\times 200$. 
 
 
 
