@@ -100,6 +100,11 @@ The signal to noise ratio of the training and validation set is plotted below.
 
 Once we trained the model, we can generate novel view image of the lego from arbitrary camera extrinsic. Below is a sperical rendering of the lego video using the provided cameras extrinsics. 
 
+<div style="display: flex; justify-content: center;">   
+   <img src="{{ site.baseurl }}/assets/final_project/rendered.gif" alt="Image 1" style="width: 90%; height: auto;"> 
+</div> 
+<p style="text-align: center; margin-top: 15px;"><strong>Figure 1:</strong> Noised images of different scale.</p>
+
 ## Bells and Whistle
 
 
