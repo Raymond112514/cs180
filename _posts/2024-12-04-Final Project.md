@@ -55,9 +55,47 @@ We now implement the neural radiance field from multiview images. We used the Le
 
 * `transform(c2w, x_c)`: Transforms a point from camera coordinates to world coordinates.
 
-$$\begin{bmatrix}x_w\\y_w\\z_w\\1\end{matrix} = \begin{bmatrix}\mathbf{R}_{3\times 3} & \mathbf{t}\\\mathbf{0}_{1\times 3} & 1\end{matrix} \begin{bmatrix}x_c\\y_c\\z_c\\1\end{matrix}$$
+$$
+\begin{bmatrix}
+x_w \\
+y_w \\
+z_w \\
+1
+\end{bmatrix}
+=
+\begin{bmatrix}
+\mathbf{R}_{3 \times 3} & \mathbf{t} \\
+\mathbf{0}_{1 \times 3} & 1
+\end{bmatrix}^{-1}
+\begin{bmatrix}
+x_c \\
+y_c \\
+z_c \\
+1
+\end{bmatrix}
+$$
 
 * `pixel_to_camera(K, uv, s)`: Transforms a point from pixel coordinates to camera coordinates.
+
+$$
+\begin{bmatrix}
+x_c \\
+y_c \\
+z_c \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+f_x & 0 & c_x \\
+0 & f_y & c_y \\
+0 & 0 & 1 \\
+\end{bmatrix}^{-1}
+\begin{bmatrix}
+su \\
+sv \\
+s \\
+\end{bmatrix}
+$$
+
 * `pixel_to_ray(K, c2w, uv)`: Takes in a pixel coordinate and returns the ray origin and ray direction. This is done by
 
 We then implemented a `RayDataset` class. The sampling method involves the following steps:
