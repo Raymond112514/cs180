@@ -154,7 +154,7 @@ Once we trained the model, we can generate novel view images of the Lego scene f
 
 ## Bells and Whistle
 
-For the Bell and Whistle, we in addition rendered the depth map. Instead of compositing per-point colors in volume rendering, we composite per-point depths to the pixel depth. The result, however, seems a but blurry at the bottom. One reason could be that the model is not trained enough. 
+For the Bell and Whistle, we in addition rendered the depth map. Instead of compositing per-point colors in volume rendering, we composite per-point depths to the pixel depth. The result, however, seems a but blurry at the bottom. One reason could be that the model is not trained enough or undersampling during training. 
 
 <div style="display: flex; justify-content: center;">   
    <img src="{{ site.baseurl }}/assets/final_project/depth.gif" alt="Image 1" style="width: 50%; height: auto;"> 
