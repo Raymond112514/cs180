@@ -154,6 +154,11 @@ Once we trained the model, we can generate novel view images of the Lego scene f
 
 ## Bells and Whistle
 
+<div style="display: flex; justify-content: center;">   
+   <img src="{{ site.baseurl }}/assets/final_project/depth.gif" alt="Image 1" style="width: 50%; height: auto;"> 
+</div> 
+<p style="text-align: center; margin-top: 15px;"><strong>Figure 9:</strong> Novel view generation.</p>
+
 
 
 
