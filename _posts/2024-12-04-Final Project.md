@@ -2,7 +2,7 @@
 layout: post
 ---
 
-## Part A: Nueral Fields
+## Part A: Neural Fields
 
 As a starting exercise, we can fit a neural radiance field (NeRF) on 2D images. The NeRF, $F_{\theta}: (u, v) \rightarrow (r, g, b)$, is parameterized by a multi-layer network with sinusoidal positional encoding. It maps a pixel $(u, v)$ to an RGB value $(r, g, b)$. The detailed architecture is shown in Figure 1.
 
@@ -47,7 +47,7 @@ There doesn't seem to be any perceptible difference between the tuned version an
 </div> 
 <p style="text-align: center; margin-top: 15px;"><strong>Figure 5:</strong> PSNR plot for fox and butterfly of tuned model during training.</p>
 
-## Part B: Nueral Radiance Fields
+## Part B: Neural Radiance Fields
 
 ### Dataset preparation
 
@@ -98,53 +98,59 @@ $$
 
 * `pixel_to_ray(K, c2w, uv)`: Takes in a pixel coordinate and returns the ray origin and ray direction. This is done by
 
+$$
+\mathbf{r}_o = -\mathbf{R}_{3\times 3}^{-1}\mathbf{t}\hspace{5mm}\mathbf{r}_d = \frac{\mathbf{X}_{\mathbf{w}} - \mathbf{r}_o}{||\mathbf{X}_{\mathbf{w}} - \mathbf{r}_o||}
+$$
+
 We then implemented a `RayDataset` class. The sampling method involves the following steps:
 1. From the training image, sample $n_{\text{image}}$ samples.
 2. For each sampled image, sample $n_{\text{points}}$ pixel coordinates.
 3. Retrieve the RGB color at those points.
 4. Compute the ray origin and ray direction using the `pixel_to_ray` function, retrieving the corresponding camera intrinsic.
-5. Return the ray origin, ray direction, and RGB color, each of shape \((N, 3)\), where \(N\) is the total number of points sampled.
+5. Return the ray origin, ray direction, and RGB color, each of shape $(N, 3)$, where $N$ is the total number of points sampled.
 
-Once we are done with the sampling, we also need to sample equally spaced points with perturbation on that sampled ray. This is done by sampling points on $\mathbf{r}_o+t\mathbf{r}_d$, where $t$ are the values sampled from $[2.0, 6.0]$ in our implementation. We also added slight noise on $t$ during training to prevent overfitting. The sampled ray are shown below.
+Once we are done with the sampling, we also need to sample equally spaced points with perturbation along the sampled ray. This is done by sampling points on $\mathbf{r}_o + t \mathbf{r}_d$, where $t$ are the values sampled from the interval $[2.0, 6.0]$ in our implementation. We also add slight noise to $t$ during training to prevent overfitting. The sampled rays are shown below.
 
 <div style="display: flex; justify-content: center;">   
    <img src="{{ site.baseurl }}/assets/final_project/nerf_3d_data.png" alt="Image 1" style="width: 90%; height: auto;"> 
 </div> 
-<p style="text-align: center; margin-top: 15px;"><strong>Figure 1:</strong> Noised images of different scale.</p>
+<p style="text-align: center; margin-top: 15px;"><strong>Figure 6:</strong> Example of sampled rays and points from (a) one image (b) multiple images.</p>
 
 ### NeRF Implemnetation
 
-The NeRF model is again parameterized by a MLP. The model takes in the 3D cooridnate $x$ and ray direction $d$ and outputs the density and RGB values. We follow the architecture as shown in Figure. 
+The NeRF model is again parameterized by an MLP. The model takes in the 3D coordinate $x$ and ray direction $d$, and outputs the density and RGB values. We follow the architecture as shown in the figure.
 
 <div style="display: flex; justify-content: center;">   
    <img src="{{ site.baseurl }}/assets/final_project/mlp_nerf.png" alt="Image 1" style="width: 90%; height: auto;"> 
 </div> 
-<p style="text-align: center; margin-top: 15px;"><strong>Figure 1:</strong> Noised images of different scale.</p>
+<p style="text-align: center; margin-top: 15px;"><strong>Figure 7:</strong> NeRF architecture.</p>
 
-We applied separate positional encoding on the $x$ and $d$, with $L_x, L_d$ set to $10$ and $4$ respectively. The color rendered is given by the discreate approximation of the volume rendering equation
+We applied separate positional encoding on the $x$ and $d$, with $L_x$ and $L_d$ set to $10$ and $4$, respectively. The color rendered is given by the discrete approximation of the volume rendering equation:
 
-$$\hat{C}(\mathbf{r}= \sum_{i=1}^N T_i(1-\exp(-\sigma_i\delta_i))\mathbf{c}_i\hspace{5mm}\text{where}\;T_i=\exp\bigg(-\sum_{j=1}^{i-1}\sigma_j\delta_j\bigg)
+$$
+\hat{C}(\mathbf{r}) = \sum_{i=1}^N T_i(1 - \exp(-\sigma_i \delta_i)) \mathbf{c}_i \hspace{5mm} \text{where} \; T_i = \exp\left(-\sum_{j=1}^{i-1} \sigma_j \delta_j \right)
+$$
 
-Once the rendered color is computed, the loss is the signal to noise ratio loss as before. We trained the model for $1000$ epochs with Adam optimizer with learning rate of $5\cdot 10^{-4}$. We sample $100$ images, and for each image $100$ rays are sampled. The rendered results during training is shown below. 
-
-<div style="display: flex; justify-content: center;">   
-   <img src="{{ site.baseurl }}/assets/final_project/nerf_3d_res.png" alt="Image 1" style="width: 90%; height: auto;"> 
-</div> 
-<p style="text-align: center; margin-top: 15px;"><strong>Figure 1:</strong> Noised images of different scale.</p>
-
-The signal to noise ratio of the training and validation set is plotted below.
+Once the rendered color is computed, the loss is the MSE loss as before. We trained the model for $2000$ epochs with the Adam optimizer and a learning rate of $5 \cdot 10^{-4}$. We sampled $100$ images, and for each image, $100$ rays were sampled. The rendered results during training are shown below.
 
 <div style="display: flex; justify-content: center;">   
-   <img src="{{ site.baseurl }}/assets/final_project/nerf_3d_plot.png" alt="Image 1" style="width: 90%; height: auto;"> 
+   <img src="{{ site.baseurl }}/assets/final_project/nerf_3d_res.png" alt="Image 1" style="width: 98%; height: auto;"> 
 </div> 
-<p style="text-align: center; margin-top: 15px;"><strong>Figure 1:</strong> Noised images of different scale.</p>
+<p style="text-align: center; margin-top: 15px;"><strong>Figure 8:</strong> Rendered results during training.</p>
 
-Once we trained the model, we can generate novel view image of the lego from arbitrary camera extrinsic. Below is a sperical rendering of the lego video using the provided cameras extrinsics. 
+The PSNR of the training and validation set is plotted below.
 
 <div style="display: flex; justify-content: center;">   
-   <img src="{{ site.baseurl }}/assets/final_project/rendered.gif" alt="Image 1" style="width: 90%; height: auto;"> 
+   <img src="{{ site.baseurl }}/assets/final_project/nerf_3d_plot.png" alt="Image 1" style="width: 70%; height: auto;"> 
 </div> 
-<p style="text-align: center; margin-top: 15px;"><strong>Figure 1:</strong> Noised images of different scale.</p>
+<p style="text-align: center; margin-top: 15px;"><strong>Figure 9:</strong> Training and validation PSNR curve.</p>
+
+Once we trained the model, we can generate novel view images of the Lego scene from arbitrary camera extrinsics. Below is a spherical rendering of the Lego scene using the provided camera extrinsics.
+
+<div style="display: flex; justify-content: center;">   
+   <img src="{{ site.baseurl }}/assets/final_project/rendered.gif" alt="Image 1" style="width: 70%; height: auto;"> 
+</div> 
+<p style="text-align: center; margin-top: 15px;"><strong>Figure 9:</strong> Novel view generation.</p>
 
 ## Bells and Whistle
 
