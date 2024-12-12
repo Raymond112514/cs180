@@ -141,14 +141,14 @@ Once the rendered color is computed, the loss is the MSE loss as before. We trai
 The PSNR of the training and validation set is plotted below.
 
 <div style="display: flex; justify-content: center;">   
-   <img src="{{ site.baseurl }}/assets/final_project/nerf_3d_plot.png" alt="Image 1" style="width: 70%; height: auto;"> 
+   <img src="{{ site.baseurl }}/assets/final_project/nerf_3d_plot.png" alt="Image 1" style="width: 60%; height: auto;"> 
 </div> 
 <p style="text-align: center; margin-top: 15px;"><strong>Figure 9:</strong> Training and validation PSNR curve.</p>
 
 Once we trained the model, we can generate novel view images of the Lego scene from arbitrary camera extrinsics. Below is a spherical rendering of the Lego scene using the provided camera extrinsics.
 
 <div style="display: flex; justify-content: center;">   
-   <img src="{{ site.baseurl }}/assets/final_project/rendered.gif" alt="Image 1" style="width: 70%; height: auto;"> 
+   <img src="{{ site.baseurl }}/assets/final_project/rendered.gif" alt="Image 1" style="width: 50%; height: auto;"> 
 </div> 
 <p style="text-align: center; margin-top: 15px;"><strong>Figure 9:</strong> Novel view generation.</p>
 
